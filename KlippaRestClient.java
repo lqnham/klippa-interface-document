@@ -19,41 +19,44 @@ public class KlippaRestClient {
 
 	public static void main(String[] args) {
 		ApiClient defaultClient = buildApiClient();
-		
-		
 		parsingID(defaultClient);
-	    getApiInformation(defaultClient);
+	    	getApiInformation(defaultClient);
 	}
 
 	private static void parsingID(ApiClient defaultClient) {
 		ParsingApi apiInstance = new ParsingApi(defaultClient);
-	    File document = new File("D:\\passport_jennifer.jpg");
-	    String template = "finform";
-	    String pdfTextExtraction = "fast";
-	    try {
-	        IdentityDocumentBody result = apiInstance.parseDocumentIdentityDocument(document, "", template, pdfTextExtraction, "", "");
-	        System.out.println(result);
-	      } catch (ApiException e) {
-	    	  handleError(e);
-	      }
+	    	File document = new File("D:\\passport_jennifer.jpg");
+	    	String template = "finform";
+	    	String pdfTextExtraction = "fast";
+	    	try {
+	        	IdentityDocumentBody result = apiInstance.parseDocumentIdentityDocument(document, "", template, pdfTextExtraction, "", "");
+			IdentityDocument data = result.getData().getParsed();
+			System.out.println("Name: " +data.getGivenNames().getValue());
+			System.out.println("DOB: " +data.getDateOfBirth().getValue());
+			System.out.println("Gender: " +data.getGender().getValue());
+			System.out.println("DateOfIssue: " +data.getDateOfIssue().getValue());
+			System.out.println(result);
+	      	} catch (ApiException e) {
+	    	  	handleError(e);
+	      	}
 	}
 	
 	private static void getApiInformation(ApiClient defaultClient) {
 		InformationApi apiInstance = new InformationApi(defaultClient);
-	    try {
-	      APIIndexBody result = apiInstance.getAPIIndex();
-	      System.out.println(result);
-	    } catch (ApiException e) {
-	      handleError(e);
+		try {
+			APIIndexBody result = apiInstance.getAPIIndex();
+			System.out.println(result);
+		} catch (ApiException e) {
+			handleError(e);
 	    }
 	}
 
 	private static void handleError(ApiException e) {
 		System.err.println("Exception when calling InformationApi#getAPIIndex");
-	      System.err.println("Status code: " + e.getCode());
-	      System.err.println("Reason: " + e.getResponseBody());
-	      System.err.println("Response headers: " + e.getResponseHeaders());
-	      e.printStackTrace();
+		System.err.println("Status code: " + e.getCode());
+		System.err.println("Reason: " + e.getResponseBody());
+		System.err.println("Response headers: " + e.getResponseHeaders());
+		e.printStackTrace();
 	}
 
 	private static ApiClient buildApiClient() {
